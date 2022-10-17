@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:provider101/homepage.dart';
+import 'package:provider101/samples/counter/counter_app.dart';
+import 'package:provider101/samples/counter/counter_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,109 +12,90 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CounterProvider()),
+        ],
+        child: MaterialApp.router(
+          routeInformationParser: goRouter.routeInformationParser,
+          routerDelegate: goRouter.routerDelegate,
+          routeInformationProvider: goRouter.routeInformationProvider,
+        ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+//
+//
+/// ***
+/// Routing
+/// ***
+//
+//
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
+enum AppPaths { home, counter, error404 }
 
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+final Map<AppPaths, String> allRoutes = {
+  AppPaths.home: 'home',
+  AppPaths.counter: 'counter',
+  AppPaths.error404: 'error404'
+};
 
-  final String title;
+final goRouter = GoRouter(
+  debugLogDiagnostics: true,
+  initialLocation: '/${allRoutes[AppPaths.home]}',
+  errorBuilder: (context, state) => const ErrorPage(),
+  routes: [
+    GoRoute(
+        name: allRoutes[AppPaths.home],
+        path: '/${allRoutes[AppPaths.home]}',
+        builder: (context, state) => const HomePage(),
+        routes: [
+          GoRoute(
+            name: allRoutes[AppPaths.counter],
+            path: '${allRoutes[AppPaths.counter]}',
+            builder: (context, state) => const CounterApp(),
+          ),
+        ]),
+    GoRoute(
+      name: allRoutes[AppPaths.error404],
+      path: '/${allRoutes[AppPaths.error404]}',
+      builder: (context, state) => const ErrorPage(),
+    ),
+  ],
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  /// official docs of go_router also describes a redirect parameter
+  // https://gorouter.dev/redirection
+  // to use provider and redirect user based on authState and its actually good
+  // but we are using shared_prefs and its working well
+  // so no need to create an extra provider and increase complexity
+  // we just need to take care of the fact that we need to
+  // empty shared_prefs on userLogout and use context.push(/login)
+  // and that will do the job just fine
+);
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+/// I keep forgetting that
+/// go -> removes entire stack and push a new page
+/// push -> stacks new page above current page (use pushNamed for named routes)
+/// replace -> replace current page with new page on current stack
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class ErrorPage extends StatelessWidget {
+  const ErrorPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text("Error 404"),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          child: TextButton(
+        onPressed: () {
+          context.pushNamed(allRoutes[AppPaths.home]!);
+        },
+        child: const Text("Lmao go to home? "),
+      )),
     );
   }
 }
