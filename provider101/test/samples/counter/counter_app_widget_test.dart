@@ -25,21 +25,25 @@ void main() {
     testWidgets('Static Widgets are good', (WidgetTester tester) async {
       await tester.pumpWidget(widgetUnderTest());
 
-      Finder text1 = find.text("Counter Value is");
-      expect(text1, findsOneWidget);
+      Finder instructionText = find.text("Enter city name to fetch weather.");
+      expect(instructionText, findsOneWidget);
 
-      Finder text2 = find.text("0");
-      expect(text2, findsOneWidget);
+      const childTextFieldWidget = TextField(
+        decoration: InputDecoration(labelText: 'City Name', hintText: 'ex London'),
+      );
 
-      Finder addIcon = find.byIcon(Icons.exposure_plus_1);
-      expect(addIcon, findsOneWidget);
+      // // Provide the childWidget to the Container.
+      // await tester.pumpWidget(Container(child: childWidget));
 
-      Finder subIcon = find.byIcon(Icons.exposure_minus_1);
-      expect(subIcon, findsOneWidget);
+      // Search for the childWidget in the tree and verify it exists.
+      expect(find.byWidget(childTextFieldWidget), findsOneWidget);
 
-      Finder resetIcon = find.byIcon(Icons.refresh);
-      expect(resetIcon, findsOneWidget);
-
+      // Finder text1 = find.text("Counter Value is");
+      // expect(text1, findsOneWidget);
+      //
+      // Finder addIcon = find.byIcon(Icons.exposure_plus_1);
+      // expect(addIcon, findsOneWidget);
+      //
       // Finder containerWidget = find.byKey(const Key("container-key"));
       // expect(containerWidget, findsOneWidget);
     });

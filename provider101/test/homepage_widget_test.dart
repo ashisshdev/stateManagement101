@@ -24,6 +24,9 @@ void main() {
     Finder title1 = find.text("Counter Example");
     expect(title1, findsOneWidget);
 
+    Finder title2 = find.text("Weather Example");
+    expect(title2, findsOneWidget);
+
     // Finder containerWidget = find.byKey(const Key("container-key"));
     // expect(containerWidget, findsOneWidget);
   });
