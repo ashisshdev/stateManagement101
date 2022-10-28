@@ -11,9 +11,15 @@ class Server {
   Server({required this.client});
 
   Future<http.Response> get({required String city}) async {
+    print("yeehaw");
     Uri uri = Uri.parse("${baseUrl}q=$city&appid=$appid");
+    print(uri);
     try {
-      var response = await client.get(uri);
+      print("yeehaw 2");
+
+      final response = await client.get(uri);
+      print("yeehaw 3");
+
       // int errorCodeInJson = int.parse(jsonDecode(response.body)['cod'].toString());
       return handleResponse(response);
     } on SocketException {

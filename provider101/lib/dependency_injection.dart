@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider101/samples/counter/counter_provider.dart';
 import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart';
 import 'package:provider101/samples/weather/data/http/weather_api.dart';
 import 'package:provider101/samples/weather/domain/repository/weather_repo.dart';
@@ -28,5 +29,6 @@ void init() {
 
   /// presentation
   // controllers as factories
+  locator.registerFactory(() => CounterProvider());
   locator.registerFactory(() => WeatherProvider(weatherDataRepo: locator()));
 }

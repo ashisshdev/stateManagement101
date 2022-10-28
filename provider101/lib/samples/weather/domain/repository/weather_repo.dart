@@ -18,7 +18,7 @@ class WeatherRepositoryImpl implements WeatherRepository {
   @override
   Future<Either<WeatherData, DataError>> fetchWeatherByCity({required String city}) async {
     try {
-      var response = await apiService.fetchWeatherByCity(city: city);
+      final response = await apiService.fetchWeatherByCity(city: city);
       if (response.statusCode == 200) {
         return Left(WeatherData.fromJson(jsonDecode(response.body)));
       } else {

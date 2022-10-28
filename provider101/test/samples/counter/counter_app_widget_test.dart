@@ -5,53 +5,30 @@ import 'package:provider101/samples/counter/counter_app.dart';
 import 'package:provider101/samples/counter/counter_provider.dart';
 
 void main() {
-  widgetUnderTest() {
-    return MaterialApp(
-      home: ChangeNotifierProvider(
-        create: (_) => CounterProvider(),
-        child: const CounterApp(),
-      ),
+  /// In case of our counter app, the provider is not interacting with any external services therefore there will be
+  /// no delays in execution of functions
+  /// hence we can use real provider here instead of a mock
+
+  Widget widgetUnderTest({required Widget page}) {
+    return ChangeNotifierProvider<CounterProvider>.value(
+      /// this is where we are using real Provider instead of a mock
+      value: CounterProvider(),
+      child: MaterialApp(home: page),
     );
   }
 
   group('initial state of counterApp', () {
     testWidgets('app Bar is good', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       Finder title = find.text("Counter App");
       expect(title, findsOneWidget);
-    });
-
-    testWidgets('Static Widgets are good', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
-
-      Finder instructionText = find.text("Enter city name to fetch weather.");
-      expect(instructionText, findsOneWidget);
-
-      const childTextFieldWidget = TextField(
-        decoration: InputDecoration(labelText: 'City Name', hintText: 'ex London'),
-      );
-
-      // // Provide the childWidget to the Container.
-      // await tester.pumpWidget(Container(child: childWidget));
-
-      // Search for the childWidget in the tree and verify it exists.
-      expect(find.byWidget(childTextFieldWidget), findsOneWidget);
-
-      // Finder text1 = find.text("Counter Value is");
-      // expect(text1, findsOneWidget);
-      //
-      // Finder addIcon = find.byIcon(Icons.exposure_plus_1);
-      // expect(addIcon, findsOneWidget);
-      //
-      // Finder containerWidget = find.byKey(const Key("container-key"));
-      // expect(containerWidget, findsOneWidget);
     });
   });
 
   group('interacting with counterApp Widgets', () {
     testWidgets('tapping increment icon', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       /// find counter value text widget with initial value
       Finder counterValueTextBefore = find.text("0");
@@ -76,7 +53,7 @@ void main() {
     });
 
     testWidgets('tapping decrement icon', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       /// find counter value text widget with initial value
       Finder counterValueTextBefore = find.text("0");
@@ -101,7 +78,7 @@ void main() {
     });
 
     testWidgets('tapping reset after increment icon', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       /// find counter value text widget with initial value
       Finder counterValueTextBefore = find.text("0");
@@ -139,7 +116,7 @@ void main() {
     });
 
     testWidgets('tapping reset after decrement icon', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       /// find counter value text widget with initial value
       Finder counterValueTextBefore = find.text("0");
@@ -177,7 +154,7 @@ void main() {
     });
 
     testWidgets('tapping reset after tapping decrement icon 5 times', (WidgetTester tester) async {
-      await tester.pumpWidget(widgetUnderTest());
+      await tester.pumpWidget(widgetUnderTest(page: const CounterApp()));
 
       /// find counter value text widget with initial value
       Finder counterValueTextBefore = find.text("0");

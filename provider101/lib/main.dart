@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:provider101/dependency_injection.dart';
 import 'package:provider101/homepage.dart';
 import 'package:provider101/samples/counter/counter_app.dart';
 import 'package:provider101/samples/counter/counter_provider.dart';
-import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart';
-import 'package:provider101/samples/weather/data/http/weather_api.dart';
-import 'package:provider101/samples/weather/domain/repository/weather_repo.dart';
 import 'package:provider101/samples/weather/presentation/controllers/weather_provider.dart';
 import 'package:provider101/samples/weather/presentation/ui/weather_app.dart';
 
@@ -24,11 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => CounterProvider()),
-          ChangeNotifierProvider(
-              create: (_) => WeatherProvider(
-                  weatherDataRepo:
-                      WeatherRepositoryImpl(apiService: WeatherApiServiceImpl(server: Server(client: http.Client()))))),
+          ChangeNotifierProvider(create: (_) => locator<CounterProvider>()),
+          ChangeNotifierProvider(create: (_) => locator<WeatherProvider>()),
         ],
         child: MaterialApp.router(
           routeInformationParser: goRouter.routeInformationParser,

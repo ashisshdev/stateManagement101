@@ -4,13 +4,14 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i7;
-import 'dart:convert' as _i12;
-import 'dart:typed_data' as _i13;
+import 'dart:convert' as _i13;
+import 'dart:typed_data' as _i14;
 import 'dart:ui' as _i11;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:provider101/samples/counter/counter_provider.dart' as _i10;
 import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart'
     as _i6;
 import 'package:provider101/samples/weather/data/http/weather_api.dart' as _i8;
@@ -21,7 +22,7 @@ import 'package:provider101/samples/weather/domain/models/weather_data_model.dar
 import 'package:provider101/samples/weather/domain/repository/weather_repo.dart'
     as _i4;
 import 'package:provider101/samples/weather/presentation/controllers/weather_provider.dart'
-    as _i10;
+    as _i12;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -187,10 +188,62 @@ class MockWeatherRepository extends _i1.Mock implements _i4.WeatherRepository {
       ) as _i7.Future<_i3.Either<_i5.WeatherData, _i9.DataError>>);
 }
 
+/// A class which mocks [CounterProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCounterProvider extends _i1.Mock implements _i10.CounterProvider {
+  MockCounterProvider() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  int get count => (super.noSuchMethod(
+        Invocation.getter(#count),
+        returnValue: 0,
+      ) as int);
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+  @override
+  void addListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
 /// A class which mocks [WeatherProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWeatherProvider extends _i1.Mock implements _i10.WeatherProvider {
+class MockWeatherProvider extends _i1.Mock implements _i12.WeatherProvider {
   MockWeatherProvider() {
     _i1.throwOnMissingStub(this);
   }
@@ -212,10 +265,10 @@ class MockWeatherProvider extends _i1.Mock implements _i10.WeatherProvider {
         ),
       ) as _i5.WeatherData);
   @override
-  _i10.Status get status => (super.noSuchMethod(
+  _i12.Status get status => (super.noSuchMethod(
         Invocation.getter(#status),
-        returnValue: _i10.Status.initial,
-      ) as _i10.Status);
+        returnValue: _i12.Status.initial,
+      ) as _i12.Status);
   @override
   String get error => (super.noSuchMethod(
         Invocation.getter(#error),
@@ -319,7 +372,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i12.Encoding? encoding,
+    _i13.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -349,7 +402,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i12.Encoding? encoding,
+    _i13.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -379,7 +432,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i12.Encoding? encoding,
+    _i13.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -409,7 +462,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i12.Encoding? encoding,
+    _i13.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -448,7 +501,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
         returnValue: _i7.Future<String>.value(''),
       ) as _i7.Future<String>);
   @override
-  _i7.Future<_i13.Uint8List> readBytes(
+  _i7.Future<_i14.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -458,8 +511,8 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i7.Future<_i13.Uint8List>.value(_i13.Uint8List(0)),
-      ) as _i7.Future<_i13.Uint8List>);
+        returnValue: _i7.Future<_i14.Uint8List>.value(_i14.Uint8List(0)),
+      ) as _i7.Future<_i14.Uint8List>);
   @override
   _i7.Future<_i2.StreamedResponse> send(_i2.BaseRequest? request) =>
       (super.noSuchMethod(

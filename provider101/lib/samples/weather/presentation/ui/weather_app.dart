@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:provider101/samples/weather/domain/models/weather_data_model.dart';
 import 'package:provider101/samples/weather/presentation/controllers/weather_provider.dart';
@@ -29,15 +30,21 @@ class _WeatherAppState extends State<WeatherApp> {
         child: Column(
           children: [
             Container(
+              key: const Key("container"),
               height: 100,
               width: MediaQuery.of(context).size.width * 0.9,
               alignment: Alignment.center,
               child: TextField(
+                key: const Key("city search text-field"),
                 controller: _controller,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                ],
                 decoration: InputDecoration(
                   labelText: 'City Name',
                   hintText: 'ex London',
                   suffix: IconButton(
+                      key: const Key("Icon Button"),
                       onPressed: () {
                         if (_controller.text.isNotEmpty && _controller.text.length > 2) {
                           Provider.of<WeatherProvider>(context, listen: false).getWeatherDataByCity(_controller.text);
@@ -54,7 +61,10 @@ class _WeatherAppState extends State<WeatherApp> {
               builder: (context, weatherProvider, child) {
                 switch (weatherProvider.status) {
                   case Status.loading:
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: CircularProgressIndicator(
+                      key: Key("circular progress indicator"),
+                    ));
                   case Status.error:
                     return Text(weatherProvider.error);
                   case Status.success:

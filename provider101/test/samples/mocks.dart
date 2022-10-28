@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
+import 'package:provider101/samples/counter/counter_provider.dart';
 import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart';
 import 'package:provider101/samples/weather/data/http/weather_api.dart';
 import 'package:provider101/samples/weather/domain/models/data_error_model.dart';
@@ -33,6 +34,7 @@ import 'package:provider101/samples/weather/utils/api_details.dart';
   WeatherRepository,
 
   /// Blocs/Providers/Controllers mocks for WidgetTests
+  CounterProvider,
   WeatherProvider,
 ], customMocks: [
   /// external package/service mocks for helper classes
@@ -241,40 +243,107 @@ class WeatherDataModelMockData {
 }
 
 class WeatherRepoMockData {
-  Map<String, dynamic> goodResponseBody = {
-    "coord": {"lon": 74.0833, "lat": 15.3333},
-    "weather": [
-      {
-        "id": 804,
-        "main": "Clouds",
-        "description"
-            "": "overcast clouds",
-        "icon": "04d"
-      }
-    ],
-    "base": "stations",
-    "main": {
-      "temp": 301.36,
-      "feels_like": 306.12,
-      "temp_min": 301.36,
-      "temp_max": 301.36,
-      "pressure": 1009,
-      "humidity": 82,
-      "sea_level": 1009,
-      "grnd_level": 996
-    },
-    "visibility": 10000,
-    "wind": {"speed": 1.98, "deg": 217, "gust": 2.7},
-    "clouds": {"all": 94},
-    "dt": 1666092061,
-    "sys": {"type": 1, "id": 9233, "country": "IN", "sunrise": 1666054546, "sunset": 1666096900},
-    "timezone": 19800,
-    "id": 1271157,
-    "name": "Goa",
-    "cod": 200
-  };
+  // static Map<String, dynamic> goodResponseBody = {
+  //   "coord": {
+  //     "lon": 76.7933,
+  //     "lat": 30.7343,
+  //   },
+  //   "weather": [
+  //     {
+  //       "id": 800,
+  //       "main": "Clear",
+  //       "description": "clear sky",
+  //       "icon": "01d",
+  //     }
+  //   ],
+  //   "base": "stations",
+  //   "main": {
+  //     "temp": 299.41,
+  //     "feels_like": 299.41,
+  //     "temp_min": 299.41,
+  //     "temp_max": 299.41,
+  //     "pressure": 1012,
+  //     "humidity": 42,
+  //     "sea_level": 1012,
+  //     "grnd_level": 973,
+  //   },
+  //   "visibility": 10000,
+  //   "wind": {
+  //     "speed": 2.25,
+  //     "deg": 359,
+  //     "gust": 3.51,
+  //   },
+  //   "clouds": {"all": 0},
+  //   "dt": 1666954920,
+  //   "sys": {
+  //     "country": "IN",
+  //     "sunrise": 1666919049,
+  //     "sunset": 1666958934,
+  //   },
+  //   "timezone": 19800,
+  //   "id": 1274746,
+  //   "name": "Chandigarh",
+  //   "cod": 200,
+  // };
 
-  http.Response goodResponse = http.Response(goodResponseBody.toString(), 200);
+  http.Response goodResponse = http.Response(
+      jsonEncode({
+        "coord": {
+          "lon": 76.7933,
+          "lat": 30.7343,
+        },
+        "weather": [
+          {
+            "id": 800,
+            "main": "Clear",
+            "description": "clear sky",
+            "icon": "01d",
+          }
+        ],
+        "base": "stations",
+        "main": {
+          "temp": 299.41,
+          "feels_like": 299.41,
+          "temp_min": 299.41,
+          "temp_max": 299.41,
+          "pressure": 1012,
+          "humidity": 42,
+          "sea_level": 1012,
+          "grnd_level": 973,
+        },
+        "visibility": 10000,
+        "wind": {
+          "speed": 2.25,
+          "deg": 359,
+          "gust": 3.51,
+        },
+        "clouds": {"all": 0},
+        "dt": 1666954920,
+        "sys": {
+          "country": "IN",
+          "sunrise": 1666919049,
+          "sunset": 1666958934,
+        },
+        "timezone": 19800,
+        "id": 1274746,
+        "name": "Chandigarh",
+        "cod": 200,
+      }),
+      200);
+
+  WeatherData goodResponseInWeatherModel = WeatherData(
+      coord: Coord(lon: 74.0833, lat: 15.3333),
+      weather: [Weather(id: 804, main: "Clouds", description: "overcast clouds", icon: "04d")],
+      base: "stations",
+      main: Main(temp: 301.36, pressure: 1009, humidity: 82),
+      wind: Wind(speed: 1.98),
+      dt: 1666092061,
+      sys: Sys(country: "IN", sunrise: 1666054546, sunset: 1666096900),
+      timezone: 19800,
+      id: 1271157,
+      name: "Goa",
+      cod: 200);
+
   http.Response badResponse = http.Response(jsonEncode({"code": 404, "error": "Some error"}.toString()), 404);
   DataError dataError = DataError(title: "Error", description: "Desc", code: 0, url: "NoUrl");
 }
@@ -294,4 +363,19 @@ class WeatherProviderMockData {
       cod: 200);
 
   DataError dataError1 = DataError(title: "Error1", description: "Desc1", code: 1, url: "NoUrl1");
+}
+
+class WeatherAppWidgetMockData {
+  WeatherData goaWeatherData = WeatherData(
+      coord: Coord(lon: 74.0833, lat: 15.3333),
+      weather: [Weather(id: 804, main: "Clouds", description: "overcast clouds", icon: "04d")],
+      base: "stations",
+      main: Main(temp: 301.36, pressure: 1009, humidity: 82),
+      wind: Wind(speed: 1.98),
+      dt: 1666092061,
+      sys: Sys(country: "IN", sunrise: 1666054546, sunset: 1666096900),
+      timezone: 19800,
+      id: 1271157,
+      name: "Goa",
+      cod: 200);
 }

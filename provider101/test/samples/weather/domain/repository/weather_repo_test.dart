@@ -1,8 +1,8 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider101/samples/weather/data/http/http_helper/AppExceptions.dart';
 import 'package:provider101/samples/weather/domain/models/data_error_model.dart';
-import 'package:provider101/samples/weather/domain/models/weather_data_model.dart';
 import 'package:provider101/samples/weather/domain/repository/weather_repo.dart';
 
 import '../../../mocks.dart';
@@ -24,15 +24,13 @@ void main() {
       "get weather by city success 1",
       () async {
         when(mockWeatherApiService.fetchWeatherByCity(city: "city"))
-            .thenReturn(Future.value(weatherRepoMockData.goodResponse));
+            .thenAnswer((_) async => weatherRepoMockData.goodResponse);
 
         final result = await sut.fetchWeatherByCity(city: "city");
+
         verify(mockWeatherApiService.fetchWeatherByCity(city: "city")).called(1);
-        result.fold((weatherData) {
-          expect(weatherData, isInstanceOf<WeatherData>());
-        }, (r) {});
-        // expect(result, Right(weatherRepoMockData.dataError));
-        verifyNoMoreInteractions(mockWeatherApiService);
+
+        expect(result, equals(Left(weatherRepoMockData.goodResponseInWeatherModel)));
       },
     );
 
@@ -44,11 +42,11 @@ void main() {
 
         final result = await sut.fetchWeatherByCity(city: "city");
         verify(mockWeatherApiService.fetchWeatherByCity(city: "city")).called(1);
-        result.fold((l) {}, (dataError) {
-          expect(dataError, isInstanceOf<DataError>());
-        });
+        // result.fold((l) {}, (dataError) {
+        //   expect(dataError, isInstanceOf<DataError>());
+        // });
+        expect(result, equals(Right(DataError(title: "Error", description: "Desc", code: 0, url: "NoUrl"))));
         // expect(result, Right(weatherRepoMockData.dataError));
-        verifyNoMoreInteractions(mockWeatherApiService);
       },
     );
   });
