@@ -4,22 +4,17 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import '../../../utils/api_details.dart';
-import 'AppExceptions.dart';
+import 'app_exceptions.dart';
 
 class Server {
   final http.Client client;
   Server({required this.client});
 
   Future<http.Response> get({required String city}) async {
-    print("yeehaw");
     Uri uri = Uri.parse("${baseUrl}q=$city&appid=$appid");
-    print(uri);
     try {
-      print("yeehaw 2");
-
+      await Future.delayed(const Duration(seconds: 2));
       final response = await client.get(uri);
-      print("yeehaw 3");
-
       // int errorCodeInJson = int.parse(jsonDecode(response.body)['cod'].toString());
       return handleResponse(response);
     } on SocketException {

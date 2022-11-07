@@ -24,7 +24,12 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 context.pushNamed(allRoutes[AppPaths.weather]!);
               },
-              child: const Text("Weather Example"))
+              child: const Text("Weather Example")),
+          TextButton(
+              onPressed: () {
+                context.pushNamed(allRoutes[AppPaths.znews]!);
+              },
+              child: const Text("News Example")),
         ],
       ),
     );

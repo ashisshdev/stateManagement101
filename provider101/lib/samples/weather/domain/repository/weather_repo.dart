@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:provider101/samples/weather/data/http/http_helper/AppExceptions.dart';
+import 'package:provider101/samples/weather/data/http/http_helper/app_exceptions.dart';
 import 'package:provider101/samples/weather/data/http/weather_api.dart';
 import 'package:provider101/samples/weather/domain/models/data_error_model.dart';
 import 'package:provider101/samples/weather/domain/models/weather_data_model.dart';

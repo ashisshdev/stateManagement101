@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:provider101/samples/weather/data/http/http_helper/AppExceptions.dart';
+import 'package:provider101/samples/weather/data/http/http_helper/app_exceptions.dart';
 import 'package:provider101/samples/weather/data/http/weather_api.dart';
 
 import '../../../mocks.dart';

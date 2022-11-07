@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:provider101/samples/weather/data/http/http_helper/AppExceptions.dart';
+import 'package:provider101/samples/weather/data/http/http_helper/app_exceptions.dart';
 import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart';
 
 import '../../../../mocks.dart';
@@ -15,7 +15,7 @@ import '../../../../mocks.mocks.dart';
 void main() {
   late MockHttpClient mockHttpClient;
   late Server sut;
-  BaseHttpTestMockData baseHttpTestMockData = BaseHttpTestMockData();
+  BaseWeatherServerTestMockData baseHttpTestMockData = BaseWeatherServerTestMockData();
 
   setUp(() {
     mockHttpClient = MockHttpClient();

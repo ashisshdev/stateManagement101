@@ -3,26 +3,47 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i7;
-import 'dart:convert' as _i13;
-import 'dart:typed_data' as _i14;
-import 'dart:ui' as _i11;
+import 'dart:async' as _i10;
+import 'dart:convert' as _i25;
+import 'dart:typed_data' as _i26;
+import 'dart:ui' as _i20;
 
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:http/http.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:provider101/samples/counter/counter_provider.dart' as _i10;
+import 'package:provider101/samples/counter/counter_provider.dart' as _i19;
 import 'package:provider101/samples/weather/data/http/http_helper/base_http.dart'
-    as _i6;
-import 'package:provider101/samples/weather/data/http/weather_api.dart' as _i8;
-import 'package:provider101/samples/weather/domain/models/data_error_model.dart'
     as _i9;
+import 'package:provider101/samples/weather/data/http/weather_api.dart' as _i13;
+import 'package:provider101/samples/weather/domain/models/data_error_model.dart'
+    as _i16;
 import 'package:provider101/samples/weather/domain/models/weather_data_model.dart'
     as _i5;
 import 'package:provider101/samples/weather/domain/repository/weather_repo.dart'
     as _i4;
 import 'package:provider101/samples/weather/presentation/controllers/weather_provider.dart'
+    as _i21;
+import 'package:provider101/samples/znews/data/http/articles_remote_datasource.dart'
+    as _i14;
+import 'package:provider101/samples/znews/data/http/http_helper/base_server.dart'
+    as _i11;
+import 'package:provider101/samples/znews/data/local/articles_local_datasource.dart'
+    as _i15;
+import 'package:provider101/samples/znews/data/local/database_helper/base_hive.dart'
     as _i12;
+import 'package:provider101/samples/znews/domain/Models/article.dart' as _i8;
+import 'package:provider101/samples/znews/domain/Models/author.dart' as _i7;
+import 'package:provider101/samples/znews/domain/Models/cache_data.dart'
+    as _i17;
+import 'package:provider101/samples/znews/domain/Repositories/articles_repo.dart'
+    as _i6;
+import 'package:provider101/samples/znews/presentation/controllers/article_page_controller.dart'
+    as _i24;
+import 'package:provider101/samples/znews/presentation/controllers/articles_homepage_controller.dart'
+    as _i22;
+import 'package:provider101/samples/znews/presentation/controllers/author_page_controller.dart'
+    as _i23;
+import 'package:provider101/samples/znews/utils/failures.dart' as _i18;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -86,9 +107,39 @@ class _FakeWeatherData_4 extends _i1.SmartFake implements _i5.WeatherData {
         );
 }
 
-class _FakeStreamedResponse_5 extends _i1.SmartFake
+class _FakeArticlesRepo_5 extends _i1.SmartFake implements _i6.ArticlesRepo {
+  _FakeArticlesRepo_5(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeAuthor_6 extends _i1.SmartFake implements _i7.Author {
+  _FakeAuthor_6(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeArticle_7 extends _i1.SmartFake implements _i8.Article {
+  _FakeArticle_7(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeStreamedResponse_8 extends _i1.SmartFake
     implements _i2.StreamedResponse {
-  _FakeStreamedResponse_5(
+  _FakeStreamedResponse_8(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -100,7 +151,7 @@ class _FakeStreamedResponse_5 extends _i1.SmartFake
 /// A class which mocks [Server].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockServer extends _i1.Mock implements _i6.Server {
+class MockServer extends _i1.Mock implements _i9.Server {
   MockServer() {
     _i1.throwOnMissingStub(this);
   }
@@ -114,13 +165,13 @@ class MockServer extends _i1.Mock implements _i6.Server {
         ),
       ) as _i2.Client);
   @override
-  _i7.Future<_i2.Response> get({required String? city}) => (super.noSuchMethod(
+  _i10.Future<_i2.Response> get({required String? city}) => (super.noSuchMethod(
         Invocation.method(
           #get,
           [],
           {#city: city},
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #get,
@@ -128,26 +179,134 @@ class MockServer extends _i1.Mock implements _i6.Server {
             {#city: city},
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
+}
+
+/// A class which mocks [BaseHttp].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBaseHttp extends _i1.Mock implements _i11.BaseHttp {
+  MockBaseHttp() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.Client get client => (super.noSuchMethod(
+        Invocation.getter(#client),
+        returnValue: _FakeClient_0(
+          this,
+          Invocation.getter(#client),
+        ),
+      ) as _i2.Client);
+  @override
+  _i10.Future<_i2.Response> get(String? url) => (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [url],
+        ),
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
+          this,
+          Invocation.method(
+            #get,
+            [url],
+          ),
+        )),
+      ) as _i10.Future<_i2.Response>);
+}
+
+/// A class which mocks [LocalDataBaseHelper].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalDataBaseHelper extends _i1.Mock
+    implements _i12.LocalDataBaseHelper {
+  MockLocalDataBaseHelper() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i10.Future<void> init() => (super.noSuchMethod(
+        Invocation.method(
+          #init,
+          [],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+  @override
+  dynamic get(String? key) => super.noSuchMethod(Invocation.method(
+        #get,
+        [key],
+      ));
+  @override
+  _i10.Future<void> set(
+    String? key,
+    dynamic data,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #set,
+          [
+            key,
+            data,
+          ],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+  @override
+  bool has(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #has,
+          [key],
+        ),
+        returnValue: false,
+      ) as bool);
+  @override
+  _i10.Future<void> remove(String? key) => (super.noSuchMethod(
+        Invocation.method(
+          #remove,
+          [key],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+  @override
+  _i10.Future<void> close() => (super.noSuchMethod(
+        Invocation.method(
+          #close,
+          [],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
+  @override
+  _i10.Future<void> clear() => (super.noSuchMethod(
+        Invocation.method(
+          #clear,
+          [],
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [WeatherApiService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWeatherApiService extends _i1.Mock implements _i8.WeatherApiService {
+class MockWeatherApiService extends _i1.Mock implements _i13.WeatherApiService {
   MockWeatherApiService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i7.Future<_i2.Response> fetchWeatherByCity({required String? city}) =>
+  _i10.Future<_i2.Response> fetchWeatherByCity({required String? city}) =>
       (super.noSuchMethod(
         Invocation.method(
           #fetchWeatherByCity,
           [],
           {#city: city},
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #fetchWeatherByCity,
@@ -155,7 +314,131 @@ class MockWeatherApiService extends _i1.Mock implements _i8.WeatherApiService {
             {#city: city},
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
+}
+
+/// A class which mocks [ArticlesRemote].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockArticlesRemote extends _i1.Mock implements _i14.ArticlesRemote {
+  MockArticlesRemote() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i10.Future<_i2.Response> getAllArticles({required String? url}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllArticles,
+          [],
+          {#url: url},
+        ),
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
+          this,
+          Invocation.method(
+            #getAllArticles,
+            [],
+            {#url: url},
+          ),
+        )),
+      ) as _i10.Future<_i2.Response>);
+  @override
+  _i10.Future<_i2.Response> getArticleById({required String? url}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getArticleById,
+          [],
+          {#url: url},
+        ),
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
+          this,
+          Invocation.method(
+            #getArticleById,
+            [],
+            {#url: url},
+          ),
+        )),
+      ) as _i10.Future<_i2.Response>);
+  @override
+  _i10.Future<_i2.Response> getArticlesByAuthor({required String? url}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getArticlesByAuthor,
+          [],
+          {#url: url},
+        ),
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
+          this,
+          Invocation.method(
+            #getArticlesByAuthor,
+            [],
+            {#url: url},
+          ),
+        )),
+      ) as _i10.Future<_i2.Response>);
+}
+
+/// A class which mocks [ArticlesLocalDB].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockArticlesLocalDB extends _i1.Mock implements _i15.ArticlesLocalDB {
+  MockArticlesLocalDB() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i10.Future<bool> saveArticle({
+    required String? key,
+    required dynamic data,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #saveArticle,
+          [],
+          {
+            #key: key,
+            #data: data,
+          },
+        ),
+        returnValue: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
+  @override
+  _i10.Future<dynamic> retrieveAllArticles({required String? key}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #retrieveAllArticles,
+          [],
+          {#key: key},
+        ),
+        returnValue: _i10.Future<dynamic>.value(),
+      ) as _i10.Future<dynamic>);
+  @override
+  _i10.Future<bool> hasArticle({required String? key}) => (super.noSuchMethod(
+        Invocation.method(
+          #hasArticle,
+          [],
+          {#key: key},
+        ),
+        returnValue: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
+  @override
+  _i10.Future<dynamic> deleteArticle({required String? key}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #deleteArticle,
+          [],
+          {#key: key},
+        ),
+        returnValue: _i10.Future<dynamic>.value(),
+      ) as _i10.Future<dynamic>);
+  @override
+  _i10.Future<dynamic> clearAllArticles() => (super.noSuchMethod(
+        Invocation.method(
+          #clearAllArticles,
+          [],
+        ),
+        returnValue: _i10.Future<dynamic>.value(),
+      ) as _i10.Future<dynamic>);
 }
 
 /// A class which mocks [WeatherRepository].
@@ -167,7 +450,7 @@ class MockWeatherRepository extends _i1.Mock implements _i4.WeatherRepository {
   }
 
   @override
-  _i7.Future<_i3.Either<_i5.WeatherData, _i9.DataError>> fetchWeatherByCity(
+  _i10.Future<_i3.Either<_i5.WeatherData, _i16.DataError>> fetchWeatherByCity(
           {required String? city}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -176,8 +459,8 @@ class MockWeatherRepository extends _i1.Mock implements _i4.WeatherRepository {
           {#city: city},
         ),
         returnValue:
-            _i7.Future<_i3.Either<_i5.WeatherData, _i9.DataError>>.value(
-                _FakeEither_2<_i5.WeatherData, _i9.DataError>(
+            _i10.Future<_i3.Either<_i5.WeatherData, _i16.DataError>>.value(
+                _FakeEither_2<_i5.WeatherData, _i16.DataError>(
           this,
           Invocation.method(
             #fetchWeatherByCity,
@@ -185,13 +468,134 @@ class MockWeatherRepository extends _i1.Mock implements _i4.WeatherRepository {
             {#city: city},
           ),
         )),
-      ) as _i7.Future<_i3.Either<_i5.WeatherData, _i9.DataError>>);
+      ) as _i10.Future<_i3.Either<_i5.WeatherData, _i16.DataError>>);
+}
+
+/// A class which mocks [ArticlesRepo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockArticlesRepo extends _i1.Mock implements _i6.ArticlesRepo {
+  MockArticlesRepo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i10.Future<bool> localSaveArticles({
+    required String? key,
+    required _i17.CacheData? cacheData,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #localSaveArticles,
+          [],
+          {
+            #key: key,
+            #cacheData: cacheData,
+          },
+        ),
+        returnValue: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
+  @override
+  _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>> localRetrieveArticles(
+          {required String? key}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #localRetrieveArticles,
+          [],
+          {#key: key},
+        ),
+        returnValue:
+            _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>.value(
+                _FakeEither_2<_i18.Failure, _i17.CacheData>(
+          this,
+          Invocation.method(
+            #localRetrieveArticles,
+            [],
+            {#key: key},
+          ),
+        )),
+      ) as _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>);
+  @override
+  _i10.Future<bool> localHasArticle({required String? key}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #localHasArticle,
+          [],
+          {#key: key},
+        ),
+        returnValue: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
+  @override
+  _i10.Future<bool> localClearCache() => (super.noSuchMethod(
+        Invocation.method(
+          #localClearCache,
+          [],
+        ),
+        returnValue: _i10.Future<bool>.value(false),
+      ) as _i10.Future<bool>);
+  @override
+  _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>
+      remoteFetchArticlesAll() => (super.noSuchMethod(
+            Invocation.method(
+              #remoteFetchArticlesAll,
+              [],
+            ),
+            returnValue:
+                _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>.value(
+                    _FakeEither_2<_i18.Failure, _i17.CacheData>(
+              this,
+              Invocation.method(
+                #remoteFetchArticlesAll,
+                [],
+              ),
+            )),
+          ) as _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>);
+  @override
+  _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>> remoteFetchArticleById(
+          {required String? id}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #remoteFetchArticleById,
+          [],
+          {#id: id},
+        ),
+        returnValue:
+            _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>.value(
+                _FakeEither_2<_i18.Failure, _i17.CacheData>(
+          this,
+          Invocation.method(
+            #remoteFetchArticleById,
+            [],
+            {#id: id},
+          ),
+        )),
+      ) as _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>);
+  @override
+  _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>
+      remoteFetchArticlesAuthor({required String? username}) =>
+          (super.noSuchMethod(
+            Invocation.method(
+              #remoteFetchArticlesAuthor,
+              [],
+              {#username: username},
+            ),
+            returnValue:
+                _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>.value(
+                    _FakeEither_2<_i18.Failure, _i17.CacheData>(
+              this,
+              Invocation.method(
+                #remoteFetchArticlesAuthor,
+                [],
+                {#username: username},
+              ),
+            )),
+          ) as _i10.Future<_i3.Either<_i18.Failure, _i17.CacheData>>);
 }
 
 /// A class which mocks [CounterProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCounterProvider extends _i1.Mock implements _i10.CounterProvider {
+class MockCounterProvider extends _i1.Mock implements _i19.CounterProvider {
   MockCounterProvider() {
     _i1.throwOnMissingStub(this);
   }
@@ -207,7 +611,7 @@ class MockCounterProvider extends _i1.Mock implements _i10.CounterProvider {
         returnValue: false,
       ) as bool);
   @override
-  void addListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i20.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -215,7 +619,7 @@ class MockCounterProvider extends _i1.Mock implements _i10.CounterProvider {
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i20.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -243,7 +647,7 @@ class MockCounterProvider extends _i1.Mock implements _i10.CounterProvider {
 /// A class which mocks [WeatherProvider].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWeatherProvider extends _i1.Mock implements _i12.WeatherProvider {
+class MockWeatherProvider extends _i1.Mock implements _i21.WeatherProvider {
   MockWeatherProvider() {
     _i1.throwOnMissingStub(this);
   }
@@ -265,10 +669,10 @@ class MockWeatherProvider extends _i1.Mock implements _i12.WeatherProvider {
         ),
       ) as _i5.WeatherData);
   @override
-  _i12.Status get status => (super.noSuchMethod(
+  _i21.Status get status => (super.noSuchMethod(
         Invocation.getter(#status),
-        returnValue: _i12.Status.initial,
-      ) as _i12.Status);
+        returnValue: _i21.Status.initial,
+      ) as _i21.Status);
   @override
   String get error => (super.noSuchMethod(
         Invocation.getter(#error),
@@ -286,7 +690,7 @@ class MockWeatherProvider extends _i1.Mock implements _i12.WeatherProvider {
         [city],
       ));
   @override
-  void addListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i20.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #addListener,
           [listener],
@@ -294,7 +698,290 @@ class MockWeatherProvider extends _i1.Mock implements _i12.WeatherProvider {
         returnValueForMissingStub: null,
       );
   @override
-  void removeListener(_i11.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [ArticlesHomePageController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockArticlesHomePageController extends _i1.Mock
+    implements _i22.ArticlesHomePageController {
+  MockArticlesHomePageController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.ArticlesRepo get articlesRepo => (super.noSuchMethod(
+        Invocation.getter(#articlesRepo),
+        returnValue: _FakeArticlesRepo_5(
+          this,
+          Invocation.getter(#articlesRepo),
+        ),
+      ) as _i6.ArticlesRepo);
+  @override
+  String get inTheArticleHomePage => (super.noSuchMethod(
+        Invocation.getter(#inTheArticleHomePage),
+        returnValue: '',
+      ) as String);
+  @override
+  set inTheArticleHomePage(String? _inTheArticleHomePage) => super.noSuchMethod(
+        Invocation.setter(
+          #inTheArticleHomePage,
+          _inTheArticleHomePage,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  List<_i8.Article> get articles => (super.noSuchMethod(
+        Invocation.getter(#articles),
+        returnValue: <_i8.Article>[],
+      ) as List<_i8.Article>);
+  @override
+  _i22.Status get status => (super.noSuchMethod(
+        Invocation.getter(#status),
+        returnValue: _i22.Status.initial,
+      ) as _i22.Status);
+  @override
+  String get error => (super.noSuchMethod(
+        Invocation.getter(#error),
+        returnValue: '',
+      ) as String);
+  @override
+  String get toast => (super.noSuchMethod(
+        Invocation.getter(#toast),
+        returnValue: '',
+      ) as String);
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+  @override
+  dynamic updateUi({
+    required _i22.Status? s,
+    List<_i8.Article>? a,
+    String? e,
+    required String? toastE,
+  }) =>
+      super.noSuchMethod(Invocation.method(
+        #updateUi,
+        [],
+        {
+          #s: s,
+          #a: a,
+          #e: e,
+          #toastE: toastE,
+        },
+      ));
+  @override
+  void addListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [AuthorPageController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAuthorPageController extends _i1.Mock
+    implements _i23.AuthorPageController {
+  MockAuthorPageController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.ArticlesRepo get articlesRepo => (super.noSuchMethod(
+        Invocation.getter(#articlesRepo),
+        returnValue: _FakeArticlesRepo_5(
+          this,
+          Invocation.getter(#articlesRepo),
+        ),
+      ) as _i6.ArticlesRepo);
+  @override
+  _i7.Author get author => (super.noSuchMethod(
+        Invocation.getter(#author),
+        returnValue: _FakeAuthor_6(
+          this,
+          Invocation.getter(#author),
+        ),
+      ) as _i7.Author);
+  @override
+  List<_i8.Article> get articles => (super.noSuchMethod(
+        Invocation.getter(#articles),
+        returnValue: <_i8.Article>[],
+      ) as List<_i8.Article>);
+  @override
+  _i22.Status get status => (super.noSuchMethod(
+        Invocation.getter(#status),
+        returnValue: _i22.Status.initial,
+      ) as _i22.Status);
+  @override
+  String get error => (super.noSuchMethod(
+        Invocation.getter(#error),
+        returnValue: '',
+      ) as String);
+  @override
+  String get toast => (super.noSuchMethod(
+        Invocation.getter(#toast),
+        returnValue: '',
+      ) as String);
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+  @override
+  dynamic populateAuthorPage({required String? username}) =>
+      super.noSuchMethod(Invocation.method(
+        #populateAuthorPage,
+        [],
+        {#username: username},
+      ));
+  @override
+  void addListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+}
+
+/// A class which mocks [ArticlePageController].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockArticlePageController extends _i1.Mock
+    implements _i24.ArticlePageController {
+  MockArticlePageController() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.ArticlesRepo get articlesRepo => (super.noSuchMethod(
+        Invocation.getter(#articlesRepo),
+        returnValue: _FakeArticlesRepo_5(
+          this,
+          Invocation.getter(#articlesRepo),
+        ),
+      ) as _i6.ArticlesRepo);
+  @override
+  _i8.Article get article => (super.noSuchMethod(
+        Invocation.getter(#article),
+        returnValue: _FakeArticle_7(
+          this,
+          Invocation.getter(#article),
+        ),
+      ) as _i8.Article);
+  @override
+  _i22.Status get status => (super.noSuchMethod(
+        Invocation.getter(#status),
+        returnValue: _i22.Status.initial,
+      ) as _i22.Status);
+  @override
+  String get error => (super.noSuchMethod(
+        Invocation.getter(#error),
+        returnValue: '',
+      ) as String);
+  @override
+  String get toast => (super.noSuchMethod(
+        Invocation.getter(#toast),
+        returnValue: '',
+      ) as String);
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+  @override
+  dynamic fetchTheArticle({required String? id}) =>
+      super.noSuchMethod(Invocation.method(
+        #fetchTheArticle,
+        [],
+        {#id: id},
+      ));
+  @override
+  void addListener(_i20.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i20.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
           #removeListener,
           [listener],
@@ -328,7 +1015,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
   }
 
   @override
-  _i7.Future<_i2.Response> head(
+  _i10.Future<_i2.Response> head(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -338,7 +1025,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #head,
@@ -346,9 +1033,9 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> get(
+  _i10.Future<_i2.Response> get(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -358,7 +1045,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #get,
@@ -366,13 +1053,13 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             {#headers: headers},
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> post(
+  _i10.Future<_i2.Response> post(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i13.Encoding? encoding,
+    _i25.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -384,7 +1071,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #post,
@@ -396,13 +1083,13 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> put(
+  _i10.Future<_i2.Response> put(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i13.Encoding? encoding,
+    _i25.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -414,7 +1101,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #put,
@@ -426,13 +1113,13 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> patch(
+  _i10.Future<_i2.Response> patch(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i13.Encoding? encoding,
+    _i25.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -444,7 +1131,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #patch,
@@ -456,13 +1143,13 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> delete(
+  _i10.Future<_i2.Response> delete(
     Uri? url, {
     Map<String, String>? headers,
     Object? body,
-    _i13.Encoding? encoding,
+    _i25.Encoding? encoding,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -474,7 +1161,7 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             #encoding: encoding,
           },
         ),
-        returnValue: _i7.Future<_i2.Response>.value(_FakeResponse_1(
+        returnValue: _i10.Future<_i2.Response>.value(_FakeResponse_1(
           this,
           Invocation.method(
             #delete,
@@ -486,9 +1173,9 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
             },
           ),
         )),
-      ) as _i7.Future<_i2.Response>);
+      ) as _i10.Future<_i2.Response>);
   @override
-  _i7.Future<String> read(
+  _i10.Future<String> read(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -498,10 +1185,10 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i7.Future<String>.value(''),
-      ) as _i7.Future<String>);
+        returnValue: _i10.Future<String>.value(''),
+      ) as _i10.Future<String>);
   @override
-  _i7.Future<_i14.Uint8List> readBytes(
+  _i10.Future<_i26.Uint8List> readBytes(
     Uri? url, {
     Map<String, String>? headers,
   }) =>
@@ -511,24 +1198,24 @@ class MockHttpClient extends _i1.Mock implements _i2.Client {
           [url],
           {#headers: headers},
         ),
-        returnValue: _i7.Future<_i14.Uint8List>.value(_i14.Uint8List(0)),
-      ) as _i7.Future<_i14.Uint8List>);
+        returnValue: _i10.Future<_i26.Uint8List>.value(_i26.Uint8List(0)),
+      ) as _i10.Future<_i26.Uint8List>);
   @override
-  _i7.Future<_i2.StreamedResponse> send(_i2.BaseRequest? request) =>
+  _i10.Future<_i2.StreamedResponse> send(_i2.BaseRequest? request) =>
       (super.noSuchMethod(
         Invocation.method(
           #send,
           [request],
         ),
         returnValue:
-            _i7.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_5(
+            _i10.Future<_i2.StreamedResponse>.value(_FakeStreamedResponse_8(
           this,
           Invocation.method(
             #send,
             [request],
           ),
         )),
-      ) as _i7.Future<_i2.StreamedResponse>);
+      ) as _i10.Future<_i2.StreamedResponse>);
   @override
   void close() => super.noSuchMethod(
         Invocation.method(

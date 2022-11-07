@@ -10,6 +10,14 @@ import 'package:provider101/samples/weather/domain/models/weather_data_model.dar
 import 'package:provider101/samples/weather/domain/repository/weather_repo.dart';
 import 'package:provider101/samples/weather/presentation/controllers/weather_provider.dart';
 import 'package:provider101/samples/weather/utils/api_details.dart';
+import 'package:provider101/samples/znews/data/http/articles_remote_datasource.dart';
+import 'package:provider101/samples/znews/data/http/http_helper/base_server.dart';
+import 'package:provider101/samples/znews/data/local/articles_local_datasource.dart';
+import 'package:provider101/samples/znews/data/local/database_helper/base_hive.dart';
+import 'package:provider101/samples/znews/domain/Repositories/articles_repo.dart';
+import 'package:provider101/samples/znews/presentation/controllers/article_page_controller.dart';
+import 'package:provider101/samples/znews/presentation/controllers/articles_homepage_controller.dart';
+import 'package:provider101/samples/znews/presentation/controllers/author_page_controller.dart';
 
 // /// external package/service mocks
 // class MockHttpClient extends Mock implements http.Client {}
@@ -26,19 +34,28 @@ import 'package:provider101/samples/weather/utils/api_details.dart';
 @GenerateMocks([
   /// Data services helper's mocks for service classes
   Server,
+  BaseHttp,
+  LocalDataBaseHelper,
 
   /// DataService class mocks for repos
   WeatherApiService,
+  ArticlesRemote,
+  ArticlesLocalDB,
 
   /// Repositories mocks for providers/Blocs/Controllers
   WeatherRepository,
+  ArticlesRepo,
 
   /// Blocs/Providers/Controllers mocks for WidgetTests
   CounterProvider,
   WeatherProvider,
+  ArticlesHomePageController,
+  AuthorPageController,
+  ArticlePageController,
 ], customMocks: [
   /// external package/service mocks for helper classes
-  MockSpec<http.Client>(as: #MockHttpClient)
+  MockSpec<http.Client>(as: #MockHttpClient),
+  // MockSpec<Box>(as: #MockHiveBox)
 ])
 void main() {}
 
@@ -48,7 +65,7 @@ void main() {}
 // Mock Data for Testing vivid scenarios below
 /// Base HTTP class test data
 
-class BaseHttpTestMockData {
+class BaseWeatherServerTestMockData {
 // response with success data
 // 1 when searched for goa , response.body =
   static Map<String, dynamic> goaBody = {
